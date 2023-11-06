@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn.neighbors import NearestNeighbors
-from annoy import AnnoyIndex
+# from annoy import AnnoyIndex
 import itertools
 import networkx as nx
 import hnswlib
@@ -108,29 +108,29 @@ def nn(ds1, ds2, names1, names2, knn=50, metric_p=2):
     return match
 
 
-def nn_annoy(ds1, ds2, names1, names2, knn = 20, metric='euclidean', n_trees = 50, save_on_disk = True):
-    """ Assumes that Y is zero-indexed. """
-    # Build index.
-    a = AnnoyIndex(ds2.shape[1], metric=metric)
-    if(save_on_disk):
-        a.on_disk_build('annoy.index')
-    for i in range(ds2.shape[0]):
-        a.add_item(i, ds2[i, :])
-    a.build(n_trees)
+# def nn_annoy(ds1, ds2, names1, names2, knn = 20, metric='euclidean', n_trees = 50, save_on_disk = True):
+#     """ Assumes that Y is zero-indexed. """
+#     # Build index.
+#     a = AnnoyIndex(ds2.shape[1], metric=metric)
+#     if(save_on_disk):
+#         a.on_disk_build('annoy.index')
+#     for i in range(ds2.shape[0]):
+#         a.add_item(i, ds2[i, :])
+#     a.build(n_trees)
 
-    # Search index.
-    ind = []
-    for i in range(ds1.shape[0]):
-        ind.append(a.get_nns_by_vector(ds1[i, :], knn, search_k=-1))
-    ind = np.array(ind)
+#     # Search index.
+#     ind = []
+#     for i in range(ds1.shape[0]):
+#         ind.append(a.get_nns_by_vector(ds1[i, :], knn, search_k=-1))
+#     ind = np.array(ind)
 
-    # Match.
-    match = set()
-    for a, b in zip(range(ds1.shape[0]), ind):
-        for b_i in b:
-            match.add((names1[a], names2[b_i]))
+#     # Match.
+#     match = set()
+#     for a, b in zip(range(ds1.shape[0]), ind):
+#         for b_i in b:
+#             match.add((names1[a], names2[b_i]))
 
-    return match
+#     return match
 
 
 def mnn(ds1, ds2, names1, names2, knn = 20, save_on_disk = True, approx = True):
